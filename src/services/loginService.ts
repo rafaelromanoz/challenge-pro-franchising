@@ -26,8 +26,11 @@ const verifyIsAdminAndDatas = async (user: IRequest) => {
 const loginService = async (user: IRequest) => {
   verifyDataFromRequestBody(user);
   const userFound = await verifyIsAdminAndDatas(user);
-  const payloadToken = `${userFound.name} ${userFound.role}`
-  const token = generateToken({ payload: payloadToken });
+  const payload = {
+    role: userFound.role,
+    name: userFound.name,
+  }
+  const token = generateToken({ payload });
   return { token };
 };
 

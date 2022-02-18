@@ -1,8 +1,13 @@
 import express from 'express';
-import { registerIngredientController } from '../controllers/ingredientController';
+import authAdminMiddleware from '../middlewares/authAdminMiddleware';
+import {
+  registerIngredientController,
+  registerIngredientStockController
+} from '../controllers/ingredientController';
 
 const ingredientRoute = express.Router();
 
-ingredientRoute.post('/', registerIngredientController);
+ingredientRoute.post('/stock', authAdminMiddleware, registerIngredientStockController )
+ingredientRoute.post('/register', authAdminMiddleware, registerIngredientController);
 
 export default ingredientRoute;

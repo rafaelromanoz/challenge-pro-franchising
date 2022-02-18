@@ -9,7 +9,7 @@ const JWT_CONFIG: SignOptions | undefined | Buffer = {
   algorithm: 'HS256',
 };
 
-const generateToken = (payload: object) => jwt.sign(payload, API_SECRET, JWT_CONFIG);
+const generateToken = (payload: object) => jwt.sign({...payload}, API_SECRET, JWT_CONFIG);
 
 const validateToken = (token: string) => {
   try {
