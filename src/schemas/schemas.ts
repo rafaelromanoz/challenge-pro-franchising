@@ -6,6 +6,12 @@ const ingredientSchema = Joi.object({
   unitPrice: Joi.number().required()
 });
 
+const userSchema = Joi.object({
+  name: Joi.string().required(),
+  password: Joi.string().required(),
+})
+
 export {
   ingredientSchema,
+  userSchema,
 }

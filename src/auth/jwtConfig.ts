@@ -9,13 +9,14 @@ const JWT_CONFIG: SignOptions | undefined | Buffer = {
   algorithm: 'HS256',
 };
 
-const generateToken = (data: object) => jwt.sign({ ...data }, API_SECRET, JWT_CONFIG);
+const generateToken = (payload: string) => jwt.sign(payload, API_SECRET, JWT_CONFIG);
 
 const validateToken = (token: string) => {
   try {
     const decoded = jwt.verify(token, API_SECRET);
-    return decoded;
+    return decoded ;
   } catch (error) {
+    console.log(error.message);
     return null;
   }
 };
