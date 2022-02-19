@@ -75,31 +75,25 @@ const getAllProductsIngredientsAndStock = async () => {
   return allProducts;
 };
 
-// const ingredientFound = await instanceDB.collection('ingredients').aggregate([
-//   {
-//     $lookup: {
-//       from: "stockIngredient",
-//       localField: "name",
-//       foreignField: "name",
-//       as: "stock_ingredients"
-//     }
-//     },
-//     {
-//       $project: {
-//         _id: 0,
-//       }
-//     }, {
-//       $addFields: {
-//         totalPrice: {
-//           $add: ["$unitPrice", "$unitPrice"]
-//         }
-//       }
-//     }
-//   ]).toArray();
+const updateProductModel = async (name: string, product: IProduct) => {
+  const instanceDB = await connection();
+  await instanceDB.collection('products').updateOne({ name }, {
+    $set: {
+      ...product,
+    }
+  });
+}
+
+const deleteProductModel = async(name: string) => {
+  const instanceDB = await connection();
+  await instanceDB.collection('products').deleteOne({ name });
+}
 
 export {
   createProductModel,
   findProductByNameModel,
   insertNameImageModel,
   getAllProductsIngredientsAndStock,
+  deleteProductModel,
+  updateProductModel,
 };

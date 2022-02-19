@@ -1,7 +1,14 @@
 import { createErrorMessage } from '../utils/functions';
-import { createProductModel, findProductByNameModel, insertNameImageModel } from '../models/productsModel';
+import {
+  createProductModel,
+  deleteProductModel,
+  findProductByNameModel,
+  insertNameImageModel,
+  updateProductModel
+} from '../models/productsModel';
 import { verifyExistsIngredientsModel } from '../models/ingredientsModel';
 import { productSchema } from '../schemas/schemas';
+
 
 
 interface IIngredients {
@@ -63,8 +70,25 @@ const insertProductService = async (product: IProduct) => {
   }
 }
 
+const updateProductService = async (name: string, product: IProduct) => {
+  verifySchemaProduct(product);
+  await verifyDontExistProduct(name);
+  await verifyIfExistsIngredients(product.ingredients);
+  await updateProductModel(name, product);
+  return {
+    ...product,
+  }
+}
+
+const deleteProductService = async (name: string) => {
+  await verifyDontExistProduct(name);
+  await deleteProductModel(name);
+}
+
 export {
   insertImageProductService,
   insertProductService,
   verifyDontExistProduct,
+  deleteProductService,
+  updateProductService,
 }

@@ -1,8 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
-import { getAllProductsIngredientsAndStock } from '../models/productsModel';
+import { deleteProductModel, getAllProductsIngredientsAndStock } from '../models/productsModel';
 import {
+  deleteProductService,
   insertImageProductService,
   insertProductService,
+  updateProductService,
   verifyDontExistProduct
 } from '../services/productsService';
 
@@ -70,9 +72,39 @@ const getAllProductsController = async (
   }
 }
 
+const deleteProductController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { name } = req.query as unknown as IQuery;
+    await deleteProductService(name);
+    return res.status(200).json({});
+  } catch (error) {
+    return next(error);
+  }
+}
+
+const updateProductController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { name } = req.query;
+    const updatedProduct = await updateProductService(name, req.body);
+    return res.status(201).json(updatedProduct);
+  } catch (error) {
+    return next(error);
+  }
+}
+
 export {
   insertImageRecipeController,
   insertProductController,
   verifyProductController,
   getAllProductsController,
+  deleteProductController,
+  updateProductController,
 };
