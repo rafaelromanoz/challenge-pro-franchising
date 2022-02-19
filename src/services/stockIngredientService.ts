@@ -1,6 +1,6 @@
 import { createErrorMessage } from "../utils/functions";
 import { findIngredientByNameModel } from "../models/ingredientsModel"
-import { insertQuantityInIngredientStockModel } from "../models/stockIngredientModel";
+import { updateQuantityStockModel } from "../models/stockIngredientModel";
 
 interface IStock {
   name: string;
@@ -14,9 +14,10 @@ const verifyExistIngredient = async (name: string) => {
 
 const stockIngredientService = async (stock: IStock) => {
   await verifyExistIngredient(stock.name);
-  await insertQuantityInIngredientStockModel(stock);
+  await updateQuantityStockModel(stock);
   return {
-    message: `Product ${stock.name} has ${stock.quantity} `
+    name: stock.name,
+    stock: stock.quantity,
   };
 
 };

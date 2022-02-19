@@ -5,5 +5,5 @@ export default (err: any, _req: Request, res: Response, _next: NextFunction) => 
     const { statusCode, message } = err;
     return res.status(statusCode).json({ message });
   }
-  return res.status(500).json({ message: 'internal error' })
+  return res.status(500).json({ message: 'internal error' });
 }

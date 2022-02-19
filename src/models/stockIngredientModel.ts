@@ -1,18 +1,28 @@
 import connection from "./connection";
 
-interface IQuantity {
+interface IStock {
   name: string,
   quantity: number,
 }
 
-const insertQuantityInIngredientStockModel = async (quantity: IQuantity) => {
+const updateQuantityStockModel = async (stock: IStock) => {
+  const { name, quantity } = stock;
   const instanceDB = await connection();
-  const { insertedId } = await instanceDB.collection('stockIngredient').insertOne({ ...quantity });
+  const { insertedId } = await instanceDB.collection('stockIngredient')
+    .updateOne(
+      { name },
+      {
+        $set: { name, quantity }
+      },
+      { upsert: true }
+    );
   return {
     id: insertedId,
   }
 };
 
+
+
 export {
-  insertQuantityInIngredientStockModel,
+  updateQuantityStockModel,
 }

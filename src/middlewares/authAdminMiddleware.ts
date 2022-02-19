@@ -7,6 +7,7 @@ type TPayload = {
     name: string;
   }
 }
+
 export default (req: Request, res: Response, next: NextFunction) => {
   try {
     const { authorization } = req.headers;
