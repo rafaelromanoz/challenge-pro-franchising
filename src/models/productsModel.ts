@@ -1,9 +1,41 @@
 import connection from "./connection";
 
-const createProductModel = async (product) => {
-  
+interface IProduct {
+  name: string;
+  price: number;
+  ingredients: Array<object>;
+}
+
+const createProductModel = async (product: IProduct) => {
+  const instanceDB = await connection();
+  const { insertedId } = await instanceDB.collection('products').insertOne({ ...product });
+  return {
+    id: insertedId,
+  }
+};
+
+const findProductByNameModel = async (productName: string) => {
+  const instanceDB = await connection();
+  const foundProduct = await instanceDB.collection('products').findOne({ name: productName });
+  return foundProduct;
+}
+
+const findProductsModel = async () => {
+  const instanceDB = await connection();
+  const ingredientsFound = await instanceDB.collection('ingredients').aggregate([
+    {
+      $lookup: {
+        from: "stockIngredient",
+        localField: "name",
+        foreignField: "name",
+        as: "quantity_ingredients"
+      }
+    }
+  ])
+  return ingredientsFound;
 };
 
 export {
   createProductModel,
+  findProductByNameModel,
 }

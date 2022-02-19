@@ -25,14 +25,18 @@ const findIngredientByNameModel = async (name: string) => {
   return foundIngredient;
 }
 
-// const findIngredientsModel = async (ingredients) => {
-//   const instanceDB = await connection();
-//   const ingredientsFound = await instanceDB.collection('ingredients').find({
-//     name: {
-//       $in: ingredients,
-//     }
-//   })
-//   return ingredientsFound;
-// };
+const verifyExistsIngredientsModel = async (arrayIngredients: Array<string>) => {
+  const instanceDB = await connection();
+  const ingredientsFound = await instanceDB.collection('ingredients').find({
+    name: {
+      $in: arrayIngredients,
+    },
+  }).toArray();
+  return ingredientsFound;
+}
 
-export { registerIngredientModel, findIngredientByNameModel };
+export {
+  registerIngredientModel,
+  findIngredientByNameModel,
+  verifyExistsIngredientsModel
+};
