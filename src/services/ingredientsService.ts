@@ -1,6 +1,6 @@
 import { ingredientSchema } from '../schemas/schemas';
 import { createErrorMessage } from '../utils/functions';
-import { registerIngredientModel } from '../models/ingredientsModel';
+import { findIngredientByNameModel, registerIngredientModel } from '../models/ingredientsModel';
 
 interface IIngredient {
   name: string;
@@ -12,8 +12,14 @@ const validateRequestBody = (ingredient: IIngredient) => {
   if (error) throw createErrorMessage(406, error.message);
 }
 
+const verifyExistsIngredient = async (name: string) => {
+  const ingredientFound = await findIngredientByNameModel(name);
+  if (ingredientFound) throw createErrorMessage(400, 'Ingredient already exists');
+}
+
 const registerIngredientService = async (ingredient: IIngredient) => {
   validateRequestBody(ingredient);
+  await verifyExistsIngredient(ingredient.name);
   const { id } = await registerIngredientModel(ingredient);
   return {
     id,

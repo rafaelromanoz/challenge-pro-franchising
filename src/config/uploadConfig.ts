@@ -6,8 +6,7 @@ const directory = path.resolve(__dirname, '..', 'uploads');
 const storage = multer.diskStorage({
   destination: directory,
   filename: (req, file, callback) => {
-    const { name } = req.query
-    return callback(null, `${name}`)
+    return callback(null, `${file.originalname}`);
   }
 })
 

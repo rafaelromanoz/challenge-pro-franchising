@@ -14,6 +14,15 @@ const createProductModel = async (product: IProduct) => {
   }
 };
 
+const insertNameImageModel = async (name: string, image: string) => {
+  const instanceDB = await connection();
+  await instanceDB.collection('products').updateOne({ name }, {
+    $set: {
+      image,
+    }
+  })
+}
+
 const findProductByNameModel = async (productName: string) => {
   const instanceDB = await connection();
   const foundProduct = await instanceDB.collection('products').findOne({ name: productName });
@@ -38,4 +47,5 @@ const findProductsModel = async () => {
 export {
   createProductModel,
   findProductByNameModel,
+  insertNameImageModel,
 }

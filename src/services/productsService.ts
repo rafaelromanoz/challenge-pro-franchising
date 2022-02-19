@@ -1,5 +1,5 @@
 import { createErrorMessage } from '../utils/functions';
-import { createProductModel, findProductByNameModel } from '../models/productsModel';
+import { createProductModel, findProductByNameModel, insertNameImageModel } from '../models/productsModel';
 import { verifyExistsIngredientsModel } from '../models/ingredientsModel';
 
 
@@ -13,17 +13,19 @@ interface IProduct {
   ingredients: Array<IIngredients>;
 }
 
-const productExists = async (name: string) => {
-  const foundProduct = await findProductByNameModel(name);
-  if (!foundProduct) throw createErrorMessage(404, 'Product dont exists');
-  return foundProduct;
+const verifyExistProduct = async (name: string) => {
+  const product = await findProductByNameModel(name);
+  if (product) throw createErrorMessage(406, 'This product already exists');
+  return product;
 }
 
-const insertImageProductService = async (name: string) => {
-  const product = await productExists(name);
+const insertImageProductService = async (name: string, image: string) => {
+  const product = await verifyExistProduct(name);
+  await insertNameImageModel(name, image);
   return {
     product,
     name,
+    image
   }
 };
 
@@ -37,11 +39,6 @@ const verifyIfExistsIngredients = async (ingredients: Array<IIngredients>) => {
   if (ingredients.length !== ingredientsFound.length) {
     throw createErrorMessage(406, 'Dont have this ingredients');
  }
-}
-
-const verifyExistProduct = async (name: string) => {
-  const product = await findProductByNameModel(name);
-  if (product) throw createErrorMessage(406, 'This product already exists');
 }
 
 const insertProductService = async (product: IProduct) => {

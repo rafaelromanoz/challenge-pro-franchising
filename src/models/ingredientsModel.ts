@@ -25,6 +25,21 @@ const findIngredientByNameModel = async (name: string) => {
   return foundIngredient;
 }
 
+// const findIngredientsModel = async (ingredients) => {
+//   const instanceDB = await connection();
+//   const ingredientsFound = await instanceDB.collection('ingredients').aggregate([
+//     {
+//       $lookup: {
+//         from: "stockIngredient",
+//         localField: "name",
+//         foreignField: "name",
+//         as: "quantity_ingredients"
+//       }
+//     }
+//   ])
+//   return ingredientsFound;
+// };
+
 const verifyExistsIngredientsModel = async (arrayIngredients: Array<string>) => {
   const instanceDB = await connection();
   const ingredientsFound = await instanceDB.collection('ingredients').find({
@@ -38,5 +53,6 @@ const verifyExistsIngredientsModel = async (arrayIngredients: Array<string>) => 
 export {
   registerIngredientModel,
   findIngredientByNameModel,
+  // findIngredientsModel,
   verifyExistsIngredientsModel
 };

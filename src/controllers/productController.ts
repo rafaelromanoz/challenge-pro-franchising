@@ -5,6 +5,10 @@ interface IQuery {
   name: string;
 }
 
+interface IFile {
+  originalname: string;
+}
+
 const insertImageRecipeController = async (
   req: Request,
   res: Response,
@@ -12,7 +16,8 @@ const insertImageRecipeController = async (
 ) => {
   try {
     const { name } = req.query as unknown as IQuery;
-    const resp = insertImageProductService(name);
+    const { originalname } = req.file as IFile;
+    const resp = await insertImageProductService(name, originalname);
     return res.status(201).json(resp);
   } catch (error) {
     return next(error);
