@@ -11,7 +11,18 @@ const userSchema = Joi.object({
   password: Joi.string().required(),
 })
 
+const ingredient = Joi.object({
+  name: Joi.string().required(),
+})
+
+const productSchema = Joi.object({
+  name: Joi.string().required(),
+  price: Joi.number().required(),
+  ingredients: Joi.array().items(ingredient),
+});
+
 export {
   ingredientSchema,
   userSchema,
+  productSchema,
 }

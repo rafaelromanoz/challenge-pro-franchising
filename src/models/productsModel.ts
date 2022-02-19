@@ -29,9 +29,9 @@ const findProductByNameModel = async (productName: string) => {
   return foundProduct;
 }
 
-const findProductsModel = async () => {
+const getAllProductsIngredientsAndStock = async () => {
   const instanceDB = await connection();
-  const ingredientsFound = await instanceDB.collection('ingredients').aggregate([
+  const ingredientsFound = await instanceDB.collection('products').aggregate([
     {
       $lookup: {
         from: "stockIngredient",
@@ -48,4 +48,5 @@ export {
   createProductModel,
   findProductByNameModel,
   insertNameImageModel,
+  getAllProductsIngredientsAndStock,
 }
