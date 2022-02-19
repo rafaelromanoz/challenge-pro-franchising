@@ -1,6 +1,6 @@
 import { ingredientSchema } from '../schemas/schemas';
 import { createErrorMessage } from '../utils/functions';
-import { findIngredientByNameModel, registerIngredientModel } from '../models/ingredientsModel';
+import { deleteIngredientModel, findIngredientByNameModel, registerIngredientModel, updateIngredientModel } from '../models/ingredientsModel';
 
 interface IIngredient {
   name: string;
@@ -17,6 +17,11 @@ const verifyExistsIngredient = async (name: string) => {
   if (ingredientFound) throw createErrorMessage(400, 'Ingredient already exists');
 }
 
+const verifyDontExistsIngredient = async (name: string) => {
+  const ingredientFound = await findIngredientByNameModel(name);
+  if (!ingredientFound) throw createErrorMessage(404, 'Ingredient dont exist');
+}
+
 const registerIngredientService = async (ingredient: IIngredient) => {
   validateRequestBody(ingredient);
   await verifyExistsIngredient(ingredient.name);
@@ -27,6 +32,22 @@ const registerIngredientService = async (ingredient: IIngredient) => {
   }
 };
 
+const updateIngredientService = async (name:string, ingredient: IIngredient) => {
+  validateRequestBody(ingredient);
+  await verifyDontExistsIngredient(name);
+  await updateIngredientModel(name, ingredient);
+  return {
+    ...ingredient,
+  }
+}
+
+const deleteIngredientService = async (name: string) => {
+  await verifyDontExistsIngredient(name);
+  await deleteIngredientModel(name);
+}
+
 export {
   registerIngredientService,
+  deleteIngredientService,
+  updateIngredientService,
 }

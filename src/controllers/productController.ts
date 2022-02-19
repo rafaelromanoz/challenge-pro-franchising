@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { deleteProductModel, getAllProductsIngredientsAndStock } from '../models/productsModel';
+import { getAllProductsIngredientsAndStock } from '../models/productsModel';
 import {
   deleteProductService,
   insertImageProductService,
@@ -92,7 +92,7 @@ const updateProductController = async (
   next: NextFunction
 ) => {
   try {
-    const { name } = req.query;
+    const { name } = req.query as unknown as IQuery;
     const updatedProduct = await updateProductService(name, req.body);
     return res.status(201).json(updatedProduct);
   } catch (error) {

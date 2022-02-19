@@ -18,27 +18,11 @@ const registerIngredientModel = async (ingredient: IIngredient): Promise<IRespon
   }
 };
 
-
 const findIngredientByNameModel = async (name: string) => {
   const instanceDB = await connection();
   const foundIngredient = await instanceDB.collection('ingredients').findOne({ name });
   return foundIngredient;
 }
-
-// const findIngredientsModel = async (ingredients) => {
-//   const instanceDB = await connection();
-//   const ingredientsFound = await instanceDB.collection('ingredients').aggregate([
-//     {
-//       $lookup: {
-//         from: "stockIngredient",
-//         localField: "name",
-//         foreignField: "name",
-//         as: "quantity_ingredients"
-//       }
-//     }
-//   ])
-//   return ingredientsFound;
-// };
 
 const verifyExistsIngredientsModel = async (arrayIngredients: Array<string>) => {
   const instanceDB = await connection();
@@ -50,9 +34,24 @@ const verifyExistsIngredientsModel = async (arrayIngredients: Array<string>) => 
   return ingredientsFound;
 }
 
+const updateIngredientModel = async (name: string, ingredient: IIngredient) => {
+  const instanceDB = await connection();
+  await instanceDB.collection('ingredients').updateOne({ name }, {
+    $set: {
+      ...ingredient,
+    }
+  })
+}
+
+const deleteIngredientModel = async (name: string) => {
+  const instanceDB = await connection();
+  await instanceDB.collection('ingredients').deleteOne({ name });
+}
+
 export {
   registerIngredientModel,
   findIngredientByNameModel,
-  // findIngredientsModel,
-  verifyExistsIngredientsModel
+  verifyExistsIngredientsModel,
+  updateIngredientModel,
+  deleteIngredientModel,
 };

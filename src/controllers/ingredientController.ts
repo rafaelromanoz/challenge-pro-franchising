@@ -1,6 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import { stockIngredientService } from '../services/stockIngredientService';
-import { registerIngredientService } from '../services/ingredientsService';
+import { deleteIngredientService, registerIngredientService, updateIngredientService } from '../services/ingredientsService';
+
+interface IQuery {
+  name: string;
+}
 
 const registerIngredientController = async (
   req: Request,
@@ -21,14 +25,46 @@ const registerIngredientStockController = async (
   next: NextFunction
 ) => {
   try {
-    const message = await stockIngredientService(req.body);
-    return res.status(201).json(message);
+    const stock = await stockIngredientService(req.body);
+    return res.status(201).json(stock);
   } catch (error) {
     return next(error);
   }
 }
 
+const updateIngredientController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { name } = req.query as unknown as IQuery;
+    const productUpdated = await updateIngredientService(name, req.body);
+    return res.status(200).json(productUpdated);
+  } catch (error) {
+    return next(error);
+  }
+}
+
+const deleteIngredientController = async  (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { name } = req.query as unknown as IQuery;
+    await deleteIngredientService(name);
+    return res.status(200).json();
+  } catch (error) {
+    return next(error);
+  }
+}
+
+
+
 export {
   registerIngredientController,
   registerIngredientStockController,
+  deleteIngredientController,
+  updateIngredientController,
 }
