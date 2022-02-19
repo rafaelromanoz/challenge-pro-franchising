@@ -66,4 +66,5 @@ const insertProductService = async (product: IProduct) => {
 export {
   insertImageProductService,
   insertProductService,
+  verifyDontExistProduct,
 }
