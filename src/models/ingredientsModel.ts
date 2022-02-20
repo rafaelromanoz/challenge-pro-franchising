@@ -48,7 +48,7 @@ const deleteIngredientModel = async (name: string) => {
   await instanceDB.collection('ingredients').deleteOne({ name });
 }
 
-export {
+export default {
   registerIngredientModel,
   findIngredientByNameModel,
   verifyExistsIngredientsModel,

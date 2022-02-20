@@ -3,13 +3,15 @@ import { MongoClient } from "mongodb";
 import sinon from "sinon";
 import { mockIngredient, mockIngredientOther } from "./mockData";
 import { expect } from "chai";
-import {
-  registerIngredientModel,
-  findIngredientByNameModel,
-  verifyExistsIngredientsModel,
+import ingredientsModel from "../../models/ingredientsModel";
+
+const {
   deleteIngredientModel,
-  updateIngredientModel
-} from "../../models/ingredientsModel";
+  findIngredientByNameModel,
+  registerIngredientModel,
+  updateIngredientModel,
+  verifyExistsIngredientsModel
+} = ingredientsModel;
 
 describe("Testando camada models dos ingredientes", () => {
   let connectionMock: MongoClient;

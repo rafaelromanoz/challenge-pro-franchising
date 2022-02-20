@@ -1,7 +1,13 @@
 import { ingredientSchema } from '../schemas/schemas';
 import { createErrorMessage } from '../utils/functions';
-import { deleteIngredientModel, findIngredientByNameModel, registerIngredientModel, updateIngredientModel } from '../models/ingredientsModel';
+import ingredientsModel from '../models/ingredientsModel';
 
+const {
+  deleteIngredientModel,
+  findIngredientByNameModel,
+  registerIngredientModel,
+  updateIngredientModel,
+} = ingredientsModel;
 interface IIngredient {
   name: string;
   unitOfMeasurement: string;
@@ -12,29 +18,28 @@ const validateRequestBody = (ingredient: IIngredient) => {
   if (error) throw createErrorMessage(406, error.message);
 }
 
-const verifyExistsIngredient = async (name: string) => {
-  const ingredientFound = await findIngredientByNameModel(name);
+const verifyExistsIngredient = async (ingredientFound: IIngredient | null) => {
   if (ingredientFound) throw createErrorMessage(400, 'Ingredient already exists');
 }
 
-const verifyDontExistsIngredient = async (name: string) => {
-  const ingredientFound = await findIngredientByNameModel(name);
+const verifyDontExistsIngredient = async (ingredientFound: IIngredient | null) => {
   if (!ingredientFound) throw createErrorMessage(404, 'Ingredient dont exist');
 }
 
 const registerIngredientService = async (ingredient: IIngredient) => {
+  const ingredientFound = await findIngredientByNameModel(ingredient.name);
   validateRequestBody(ingredient);
-  await verifyExistsIngredient(ingredient.name);
-  const { id } = await registerIngredientModel(ingredient);
+  await verifyExistsIngredient(ingredientFound);
+  await registerIngredientModel(ingredient);
   return {
-    id,
     ...ingredient,
   }
 };
 
-const updateIngredientService = async (name:string, ingredient: IIngredient) => {
+const updateIngredientService = async (name: string, ingredient: IIngredient) => {
+  const ingredientFound = await findIngredientByNameModel(ingredient.name);
   validateRequestBody(ingredient);
-  await verifyDontExistsIngredient(name);
+  await verifyDontExistsIngredient(ingredientFound);
   await updateIngredientModel(name, ingredient);
   return {
     ...ingredient,
@@ -42,12 +47,17 @@ const updateIngredientService = async (name:string, ingredient: IIngredient) => 
 }
 
 const deleteIngredientService = async (name: string) => {
-  await verifyDontExistsIngredient(name);
+  const ingredientFound = await findIngredientByNameModel(name);
+  await verifyDontExistsIngredient(ingredientFound);
   await deleteIngredientModel(name);
 }
 
-export {
+export default {
   registerIngredientService,
   deleteIngredientService,
   updateIngredientService,
+  validateRequestBody,
+  verifyDontExistsIngredient,
+  verifyExistsIngredient,
+  createErrorMessage,
 }

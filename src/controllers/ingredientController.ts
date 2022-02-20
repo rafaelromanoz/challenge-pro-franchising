@@ -1,7 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import { stockIngredientService } from '../services/stockIngredientService';
-import { deleteIngredientService, registerIngredientService, updateIngredientService } from '../services/ingredientsService';
+import ingredientsService from '../services/ingredientsService';
 
+const {
+  updateIngredientService,
+  registerIngredientService,
+  deleteIngredientService
+} = ingredientsService;
 interface IQuery {
   name: string;
 }

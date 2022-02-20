@@ -6,10 +6,10 @@ import {
   insertNameImageModel,
   updateProductModel
 } from '../models/productsModel';
-import { verifyExistsIngredientsModel } from '../models/ingredientsModel';
+import ingredientsModel from '../models/ingredientsModel';
 import { productSchema } from '../schemas/schemas';
 
-
+const { verifyExistsIngredientsModel } = ingredientsModel;
 
 interface IIngredients {
   name: string;
