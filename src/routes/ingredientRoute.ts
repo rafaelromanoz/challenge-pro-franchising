@@ -1,11 +1,13 @@
 import express from 'express';
 import authAdminMiddleware from '../middlewares/authAdminMiddleware';
-import {
-  deleteIngredientController,
-  registerIngredientController,
+import ingredientsController from '../controllers/ingredientController';
+
+const {
   registerIngredientStockController,
+  registerIngredientController,
+  deleteIngredientController,
   updateIngredientController
-} from '../controllers/ingredientController';
+} = ingredientsController;
 
 const ingredientRoute = express.Router();
 

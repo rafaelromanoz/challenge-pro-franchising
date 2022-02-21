@@ -1,7 +1,8 @@
 import { createErrorMessage } from "../utils/functions";
-import { findIngredientByNameModel } from "../models/ingredientsModel"
+import ingredientsModel from "../models/ingredientsModel"
 import { updateQuantityStockModel } from "../models/stockIngredientModel";
 
+const { findIngredientByNameModel } = ingredientsModel;
 interface IStock {
   name: string;
   quantity: number;

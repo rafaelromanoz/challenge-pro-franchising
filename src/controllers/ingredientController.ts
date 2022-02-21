@@ -67,7 +67,7 @@ const deleteIngredientController = async  (
 
 
 
-export {
+export default {
   registerIngredientController,
   registerIngredientStockController,
   deleteIngredientController,

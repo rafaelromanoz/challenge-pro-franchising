@@ -59,4 +59,30 @@ describe("Testando a camada service dos ingredients", () => {
       expect(result).to.be.deep.equal(mockIngredientOther);
     });
   });
+  describe("Testando update de ingrediente", () => {
+    it("Verifica se o update ocorre corretamente", async () => {
+      const result = await ingredientService.updateIngredientService("Requeijão", mockIngredient);
+      expect(result).to.be.an('object').with.a.property("name");
+    });
+    it("Verifica se o update não ocorre se o produto não existir", async () => {
+      try {
+        await ingredientService.updateIngredientService("Queijo", mockIngredient);
+      } catch (error) {
+        expect(error).to.be.an("object").with.an.property("statusCode");
+      }
+    })
+  })
+  describe("Testando deleção de  ingrediente", () => {
+    it("verifica se deleta corretamente um ingrediente", async () => {
+      const result = await ingredientService.deleteIngredientService("Requeijão");
+      expect(result).to.be.an("undefined");
+    })
+    it("Verifica se não cadastra um produto que não existe", async () => {
+      try {
+        await ingredientService.deleteIngredientService("Ricota");
+      } catch (error) {
+        expect(error).to.be.an("object").with.property("statusCode");
+      }
+    })
+  })
 });
