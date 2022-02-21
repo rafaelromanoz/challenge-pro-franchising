@@ -5,14 +5,14 @@ const OPTIONS: object = {
   useUnifiedTopology: true,
 };
 
-const mongodburl = 'mongodb://mongo:27017/';
+const mongodbUrl = 'mongodb://localhost:27017/';
 
 let db: null | any = null;
 
 const connection = () => {
   return db
     ? Promise.resolve(db)
-    : MongoClient.connect(mongodburl, OPTIONS).then((conn) => {
+    : MongoClient.connect(mongodbUrl, OPTIONS).then((conn) => {
         db = conn.db('challenge_pro_franchising');
         return db;
       });

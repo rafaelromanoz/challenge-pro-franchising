@@ -1,14 +1,10 @@
-version: '3'
+version: "3.8"
+
 services:
-  api:
-    build: .
+  mongodb:
+    image : mongo
+    container_name: mongodb
     ports:
-      - '3000:3000'
-    depends_on:
-      - mongo
-    command: npm run seed
-  mongo:
-    image: mongo
-    ports:
-      - "27017:27017"
+        - 27017:27017
+    restart: unless-stopped
 
