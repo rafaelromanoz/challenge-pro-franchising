@@ -7,6 +7,7 @@ import cors from 'cors';
 import userRouter from './routes/usersRoute';
 import loginRoute from './routes/loginRoute';
 import productRoute from './routes/productRoute';
+import connection from './models/connection';
 
 const app = express();
 const port = 3000;
@@ -24,6 +25,9 @@ app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}!`);
+  connection().then(() => {
+    console.log('MongoDb connected');
+  });
 });
 
 export { app };
