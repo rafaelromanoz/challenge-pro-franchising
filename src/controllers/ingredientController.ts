@@ -45,7 +45,7 @@ const updateIngredientController = async (
   try {
     const { name } = req.query as unknown as IQuery;
     const productUpdated = await updateIngredientService(name, req.body);
-    return res.status(200).json(productUpdated);
+    return res.status(201).json(productUpdated);
   } catch (error) {
     return next(error);
   }

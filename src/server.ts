@@ -7,7 +7,6 @@ import cors from 'cors';
 import userRouter from './routes/usersRoute';
 import loginRoute from './routes/loginRoute';
 import productRoute from './routes/productRoute';
-import connectDb from '../src/models/connection';
 
 const app = express();
 const port = 3000;

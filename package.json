@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest --coverage --detectOpenHandles --runInBand --forceExit",
     "test:watch": "jest --watch",
-    "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/server.ts",
+    "start": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/server.ts",
     "seed": "node src/seed/seed.js"
   },
   "keywords": [],

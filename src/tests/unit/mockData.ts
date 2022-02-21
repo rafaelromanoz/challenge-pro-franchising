@@ -10,7 +10,13 @@ const mockIngredientOther = {
   unitPrice: 20
 }
 
+const mockStockRequest = {
+  name: "Frango",
+  quantity: 20
+}
+
 export {
   mockIngredient,
   mockIngredientOther,
+  mockStockRequest
 }
