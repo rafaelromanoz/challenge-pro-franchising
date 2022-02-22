@@ -148,10 +148,10 @@ POST http://localhost:3000/product/create
 	"price": 25,
 	"ingredients": [
 		{
-			"name": "Farinha"
+		  "name": "Farinha"
 		},
 		{
-			"name": "Café em pó"
+		  "name": "Café em pó"
 		}
 	]
 }
@@ -172,31 +172,30 @@ GET http://localhost:3000/product/getAllProduct
 ```json
 [
 	{
-		"name": "Torta",
+	  "name": "Torta",
 		"price": 25,
 		"ingredients": [
 			{
-				"name": "Frango",
-				"unitOfMeasurement": "kg",
-				"unitPrice": 20
+			  "name": "Frango",
+			  "unitOfMeasurement": "kg",
+			  "unitPrice": 20
 			},
 			{
-				"name": "Requeijão",
-				"unitOfMeasurement": "kg",
-				"unitPrice": 20
+			  "name": "Requeijão",
+			  "unitOfMeasurement": "kg",
+			  "unitPrice": 20
 			}
 		],
-		"stock_ingredient": [
+	  "stock_ingredient": [
 			{
-				"name": "Frango",
-				"quantity": 20
+			  "name": "Frango",
+			  "quantity": 20
 			}
 		],
-		"totalPrice": 40
+	  "totalPrice": 40
 	}
 ]
 ```
-
 ## 📦 Desenvolvimento
 
 No desenvolvimento da API foi utilizada da arquitetura MSC, Models, Services, Controller, no service estão as regras de negócio, controller estão as requisições.
