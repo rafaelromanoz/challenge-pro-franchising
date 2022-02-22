@@ -218,5 +218,5 @@ Para padronização e qualidade de código foi utilizado o ESLint e o editorconf
 * [Docker](https://nodejs.org/en/) - Container MongoDB
 * [ESLint](https://eslint.org/) - Padronização e qualidade de código
 * [Jest](https://jestjs.io/pt-BR/) - Framework de Testes
-* [auth](https://jwt.io/) - Ferramenta de auth
+* [JsonWebToken](https://jwt.io/) - Ferramenta de auth
 * [Joi](https://joi.dev/api/?v=17.6.0) - Validações das informações requests.
