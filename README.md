@@ -64,45 +64,146 @@ npm test
 Para usar a aplicação recomenda-se o Insomnia, na pasta
 insomnia-file possui o ambiente configurado com as rotas para usar.
 
-Na rota /user é possível cadastrar um usuário, envie um json no seguinte formato, após o cadastro é gerado um token que com ele é possível fazer depósitos ou transferências. Copie o token e coloque no header 'authorization' das próximas requisições.
+Na rota /login é possível realizar um login de usuário, seja ele administrador ou lojista, para fins de desenvolvimento e testes fazer o primeiro login com o usuário abaixo.
 ```
-http://localhost:3000/user
-```
-```json
-{
-  "name": "Jose Giovani Oliveira",
-  "cpf": "114.684.207-08"
-}
-```
-Para depositar é necessário um CPF válido cadastrado antes e o seguinte JSON no corpo da requisição.
-```
-http://localhost:3000/account/deposit
+POST http://localhost:3000/login
 ```
 ```json
 {
-  "cpf": "114.684.207-08",
-  "deposit": 3000
+  "name": "admin",
+  "password": "admin"
 }
 ```
-Na rota de transferência entre as contas, como a operação precisa ser atômica respeitando o princípio  ACID (atomic, consistency, isolation, durability) foi utilizada do método transaction do TypeORM, as contas não podem ter valor negativo então só é possível transferir se o usuário possui saldo, e também por questões de regra de negócio não é possível transferir um valor maior que 2000, para transferir dinheiro entre as contas o JSON aceito é nesse padrão:
+Essa rota retorna um token, que será usado nas próximas requisições, copie ele, agora que você já está logado como administrador é possível cadastar um dono de loja, pela rota abaixo.
+```
+POST http://localhost:3000/users/owner
+```
+```json
+{
+  "name": "José da Silva",
+  "password": "123456789"
+}
+```
+Na rota acima é possível cadastrar um dono de loja, para isso copie o token utilizado na rota anterior, no header da requisição, com a chave <strong>authorization</strong> a rota aceita um corpo com nome e password que deseja ser criado, <strong>Importante:</strong> a senha é criptografada e salva no banco.
+
+Nas rotas de ingredientes tem o CRUD dos ingredientes conforme solicitado.
+
+Rota para cadastrar ingrediente, segue modelo do corpo aceito.
+<strong>Importante:</strong> em todas rotas é necessário ser um dono ou administrador para cadastrar, deletar, modificar ou ler os ingredientes.
+
+Não é possível cadastrar ingrediente repetido.
+```
+POST http://localhost:3000/ingredient/register
+```
+
+```json
+{
+	"name": "Açucar",
+	"unitOfMeasurement": "kg",
+	"unitPrice": 20
+}
+```
+Na rota de modificar ingrediente é necessário passar via request query, na chave <strong>name</strong> o nome de ingrediente que deseja ser alterado, o corpo da requisição é o mesmo da rota anterior.
+```
+PUT http://localhost:3000/ingredient/update
+```
+
+```json
+{
+	"name": "Leite",
+	"unitOfMeasurement": "kg",
+	"unitPrice": 20
+}
+```
+Rota deletar ingrediente é necessário passar como request query o nome do ingrediente.
+```
+DELETE http://localhost:3000/ingredient/delete
+```
+```
+Request query
+name = "leite"
+```
+Rota de cadastrar quantidade de ingrediente no estoque.
+Nessa rota é possível cadastrar a quantidade de cada ingrediente, só é possível cadastrar uma quantidade de estoque de um ingrediente existente.
+```
+POST http://localhost:3000/ingredient/stock
+```
+```json
+{
+	"name": "Frango",
+	"quantity": 60
+}
+```
+
+### Rotas de produtos
+
+Rota de cadastrar produto:
+Nessa rota é possível cadastrar um produto e um ponto importante é que somente é possível cadastar o produto se os ingredientes existirem no banco de dados, veja rota e corpo da requisição aceita pela requisição.
+```
+POST http://localhost:3000/product/create
+```
+```json
+{
+	"name": "Bolo",
+	"price": 25,
+	"ingredients": [
+		{
+			"name": "Farinha"
+		},
+		{
+			"name": "Café em pó"
+		}
+	]
+}
+```
+Rota de cadastrar imagem no produto:
+Nessa rota é possível cadastrar uma imagem ao produto, SOMENTE são aceitos arquivos png e jpg, nessa rota é aceito um arquivo multipart com a chave "image".
 
 ```
-http://localhost:3000/account/transfer
+POST http://localhost:3000/product/image
 ```
 
+Rota de mostrar todos produtos:
+Nessa rota é possível ver todos produtos cadastrados e a soma de seus respectivos ingredientes.
+O retorn é o seguinte:
+```
+GET http://localhost:3000/product/getAllProduct
+```
 ```json
-{
-  "cpfOrigin": "115.987.555-98",
-  "quantity":  188,
-  "cpfDestiny": "114.684.207-08"
-}
+[
+	{
+		"name": "Torta",
+		"price": 25,
+		"ingredients": [
+			{
+				"name": "Frango",
+				"unitOfMeasurement": "kg",
+				"unitPrice": 20
+			},
+			{
+				"name": "Requeijão",
+				"unitOfMeasurement": "kg",
+				"unitPrice": 20
+			}
+		],
+		"stock_ingredient": [
+			{
+				"name": "Frango",
+				"quantity": 20
+			}
+		],
+		"totalPrice": 40
+	}
+]
 ```
 
 ## 📦 Desenvolvimento
 
 No desenvolvimento da API foi utilizada da arquitetura MSC, Models, Services, Controller, no service estão as regras de negócio, controller estão as requisições.
 
-Para o banco de dados foi utilizado o MySQL e o mapeamento Objeto-Relacional foi utilizado o TypeORM.
+Para o banco de dados foi utilizado o MongoDB.
+
+Para o setup de testes foram utilizadas algumas bibliotecas como, jest, mocha, chai, mongo-memory-server entre outras.
 
 Para confecção da API foi utilizado do framework Express e Node.js com TypeScript.
 
@@ -112,11 +213,10 @@ Para padronização e qualidade de código foi utilizado o ESLint e o editorconf
 
 * [TypeScript](https://www.typescriptlang.org/) - Linguagem
 * [JavaScript](javascript.com) - Linguagem
-* [TypeORM](https://typeorm.io/#/) - Mapeamento objeto-relacional
-* [MySQL](https://www.mysql.com/) - Banco de Dados
+* [MongoDB](https://www.mongodb.com/) - Banco de Dados
 * [Express](https://expressjs.com/pt-br/) - Criação API
 * [Node.js](https://nodejs.org/en/) - Criação API
-* [Docker](https://nodejs.org/en/) - Container MySQL
+* [Docker](https://nodejs.org/en/) - Container MongoDB
 * [ESLint](https://eslint.org/) - Padronização e qualidade de código
 * [Jest](https://jestjs.io/pt-BR/) - Framework de Testes
 * [auth](https://jwt.io/) - Ferramenta de auth
